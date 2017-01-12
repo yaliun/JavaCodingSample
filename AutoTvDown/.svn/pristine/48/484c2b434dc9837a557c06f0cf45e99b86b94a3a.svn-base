@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="torrent.query.TorrentManage">
+	<resultMap id="hashmap" type="java.util.HashMap">
+	</resultMap>
+	
+	<select id="selectConfirmTarget" resultType="int">
+		<![CDATA[    
+        	SELECT COUNT(*) FROM broadcast_contents A
+			WHERE WEEK = DATE_FORMAT(SYSDATE(),'%w')
+			AND NOT EXISTS 
+				(SELECT contents_no 
+				FROM download_history B 
+				WHERE A.no = B.contents_no 
+				AND B.play_date = DATE_FORMAT(SYSDATE(),'%y%m%d') )
+		]]>
+    </select>
+
+	<insert id="insertDownLoadTarget" >
+		<![CDATA[
+			INSERT INTO download_history(contents_no, play_date,reg_date)
+			SELECT NO, DATE_FORMAT(SYSDATE(),'%y%m%d'), SYSDATE()
+			FROM broadcast_contents A
+			WHERE WEEK = DATE_FORMAT(SYSDATE(),'%w')
+			AND NOT EXISTS 
+				(SELECT contents_no 
+				FROM download_history B 
+				WHERE A.no = B.contents_no 
+				AND B.play_date = DATE_FORMAT(SYSDATE(),'%y%m%d') )
+		]]>
+	</insert>
+
+	<update id="updateDownLoadCheck" parameterType="int">
+		<![CDATA[
+			UPDATE download_history
+			SET download_check = 'Y', upt_date = SYSDATE()
+			WHERE no = #{no}
+		]]>
+	</update>
+	
+    <select id="selectNotDownloadList" resultMap="hashmap">
+		<![CDATA[    
+			SELECT NO, (SELECT NAME FROM broadcast_contents WHERE NO = contents_no) AS NAME, play_date 
+			FROM download_history WHERE download_check = 'N'
+			AND play_date >= DATE_FORMAT(DATE_SUB(SYSDATE(), INTERVAL 1 DAY),'%y%m%d')
+		]]>
+    </select>
+    
+</mapper>

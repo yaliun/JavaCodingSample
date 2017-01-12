@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="torrent.query.Member">
+	<resultMap id="hashmap" type="java.util.HashMap">
+	</resultMap>
+
+	<select id="getChannel" resultType="String">
+		SELECT channel FROM channel where no = 1
+	</select>
+    <select id="getMemberInfo" parameterType="String" resultMap="hashmap">
+        SELECT id, name, email, DATE_FORMAT(birthday,'%Y-%m-%d') AS birthday, blood, gender, hobby FROM member where id = #{id}
+    </select>
+     <select id="getList" resultMap="hashmap">
+        SELECT id, name, email,  DATE_FORMAT(birthday,'%Y-%m-%d') AS birthday, DATE_FORMAT(reg_dtm,'%Y-%m-%d %H:%i:%s') AS reg_dtm, DATE_FORMAT(upt_dtm,'%Y-%m-%d %H:%i:%s') AS upt_dtm FROM member
+    </select>
+</mapper>

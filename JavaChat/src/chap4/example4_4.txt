@@ -1,0 +1,1 @@
+BufferedWriter 클래스를 이용해서 저장한 파일입니다.

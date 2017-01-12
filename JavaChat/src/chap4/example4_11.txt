@@ -1,0 +1,41 @@
+1 : import java.io.*;
+2 : public class AttachLineNumber
+3 : {
+4 :    public static void main(String args[]){
+5 :       String buf;
+6 :       FileInputStream fin=null;
+7 :       FileOutputStream fout=null;
+8 :       if(args.length != 2){ // 인수로 소스파일명 및 대상파일명을 입력해야 한다.
+9 :          System.out.println("소스파일 및 대상파일을 지정하십시오.");
+10 :          System.exit(1);
+11 :       }
+12 :       try{
+13 :          fin = new FileInputStream(args[0]); // 소스 파일과 연결된 입력 파일 스트림
+14 :          fout = new FileOutputStream(args[1]); // 대상 파일과 연결된 입력 파일 스트림
+15 :       }catch(Exception e){
+16 :          System.out.println(e);
+17 :          System.exit(1);
+18 :       }
+19 :       BufferedReader read = new BufferedReader(new InputStreamReader(fin));
+20 :       PrintStream write = new PrintStream(fout); // 기본 fout 출력스트림에 연결
+21 :       int num=1;
+22 :       while(true){
+23 :          try{
+24 :             buf=read.readLine(); // 한 줄의 데이터를 읽는다.
+25 :             if(buf==null) break;
+26 :          }catch(IOException e){
+27 :             System.out.println(e);
+28 :             break;
+29 :          }
+30 :          buf = num + " : " + buf; // [번호 : 프로그램 내용] 형식으로 수정
+31 :          write.println(buf); // 수정된 내용을 파일에 출력한다.
+32 :          num++;
+33 :       }
+34 :       try{
+35 :          fin.close();
+36 :          fout.close();
+37 :       }catch(IOException e){
+38 :          System.out.println(e);
+39 :       }
+40 :    }
+41 : }

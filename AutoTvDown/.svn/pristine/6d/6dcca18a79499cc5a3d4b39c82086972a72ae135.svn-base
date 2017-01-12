@@ -1,0 +1,29 @@
+import torrent.service.TorrentSite;
+
+
+public class TorrentManage {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		TorrentSite site = new TorrentSite();
+		
+		try
+		{
+			// 당일 다운로드할 컨텐츠 준비
+			site.todayContentsInit();
+			
+			//사이트의 쿠키값 저장
+			site.getSiteCookie();
+			
+			
+			
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+}
